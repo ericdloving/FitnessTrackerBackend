@@ -7,7 +7,7 @@ async function addActivityToRoutine({
   duration,
 }) {
   const { rows: routine_activity } = await client.query(
-    `INSERT INTO "routineActivities"("routineId", "activityId", count, duration)
+    `INSERT INTO routine_activities("routineId", "activityId", count, duration)
      VALUES ($1, $2, $3, $4) 
      ON CONFLICT ("routineId","activityId") DO NOTHING
      RETURNING *;`,

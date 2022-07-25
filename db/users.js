@@ -36,7 +36,18 @@ async function getUser({ username, password }) {
 
 }
 
-async function getUserById(userId) {}
+async function getUserById(userId) {
+  const {rows: [user]} = await client.query(
+    `
+    SELECT *
+    FROM users
+    WHERE id = $1;
+    `,
+    [userId]
+  );
+  return {id: user.id, username: user.username};
+}
+
 
 async function getUserByUsername(userName) {
     const {
