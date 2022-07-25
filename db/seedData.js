@@ -5,6 +5,13 @@ const client = require("./client")
 async function dropTables() {
   console.log("Dropping All Tables...")
   // drop all tables, in the correct order
+  await client.query(`
+  DROP TABLE IF EXISTS "routineActivities";
+  DROP TABLE IF EXISTS routines;
+  DROP TABLE IF EXISTS activities;
+  DROP TABLE IF EXISTS users;
+  `);
+  
 }
 
 async function createTables() {
@@ -14,7 +21,7 @@ async function createTables() {
     `CREATE TABLE users (
       id SERIAL PRIMARY KEY,
             username VARCHAR(255) UNIQUE NOT NULL,
-            password VARCHAR(255) NOT NULL,
+            password VARCHAR(255) NOT NULL
     );
     CREATE TABLE activities (
       id SERIAL PRIMARY KEY,
@@ -27,7 +34,7 @@ async function createTables() {
       "isPublic" BOOLEAN DEFAULT false,
       name VARCHAR(255) UNIQUE NOT NULL,
       goal TEXT NOT NULL
-    )
+    );
     CREATE TABLE "routineActivities" (
       id SERIAL PRIMARY KEY,
       "routineId" INTEGER REFERENCES routines(id),
@@ -36,7 +43,7 @@ async function createTables() {
       count INTEGER,
       UNIQUE ("routineId","activityId")
 
-    )
+    );
 
     `
   )
