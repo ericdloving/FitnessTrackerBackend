@@ -24,7 +24,9 @@ async function getAllActivities() {
   return rows;
 }
 
-async function getActivityById(id) {
+
+
+async function getActivityById(id) { 
   const {rows: [activity]} = await client.query(
     `
     SELECT *
@@ -52,7 +54,6 @@ async function getActivityByName(name) {
 }
 
 
-async function attachActivitiesToRoutines(routines) {}
 
 async function updateActivity({ id, ...fields }) {
   const setString = Object.keys(fields)
@@ -76,7 +77,6 @@ module.exports = {
   getAllActivities,
   getActivityById,
   getActivityByName,
-  attachActivitiesToRoutines,
   createActivity,
   updateActivity,
 };

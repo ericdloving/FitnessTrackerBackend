@@ -19,7 +19,18 @@ async function addActivityToRoutine({
 
 async function getRoutineActivityById(id) {}
 
-async function getRoutineActivitiesByRoutine({ id }) {}
+async function getRoutineActivitiesByRoutine({ id }) {
+  const { rows } = await client.query(
+    `
+    SELECT * 
+    FROM routine_activities
+    WHERE "routineId" = $1;
+    `,[id]);
+    console.log(rows, "THIS IS INSSIDE")
+    return rows;
+}
+
+
 
 async function updateRoutineActivity({ id, ...fields }) {}
 

@@ -1,4 +1,7 @@
+const { getActivityById, attachActivitiesToRoutines } = require("./activities");
 const client = require("./client");
+const { getRoutineActivitiesByRoutine } = require("./routine_activities");
+
 
 async function createRoutine({ creatorId, isPublic, name, goal }) {
   const {
@@ -37,13 +40,26 @@ async function getRoutinesWithoutActivities() {
 }
 
 async function getAllRoutines() {
-  const { rows } = await client.query(
+  //should include activities
+  const { rows: routines} = await client.query(
     `
     SELECT * 
     FROM routines;
     `
-  )
-  return rows;
+  );
+
+  // const completeRoutines = routines.map((routine) => {
+  //   let routineActivities =  getRoutineActivitiesByRoutine(routine);
+  //   console.log(routineActivities, "YYYYY")
+  //   const activities = routineActivities.map((routineActivity)=> {
+  //     getActivityById(routineActivity.activityId)
+  //   })
+  //   return {activities, ...routine}
+  // })
+  // console.log(completeRoutines, 'XXXX');
+  return attachActivitiesToRoutines(routines);
+  
+
 }
 
 async function getAllPublicRoutines() {}
