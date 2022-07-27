@@ -1,6 +1,7 @@
 /* eslint-disable no-useless-catch */
 const express = require("express");
 const { getUserByUsername, createUser } = require("../db");
+const {requireUser} = require("../app")
 const router = express.Router();
 const jwt = require("jsonwebtoken");
 const { JWT_SECRET } = process.env;
@@ -13,17 +14,16 @@ router.post('/register', async (req,res,next)=>{
         const {username,password} = req.body;
         if (password.length < 8){
             next({name: "passwordLengthError",
-            message: "The password is not long enough"})
+            message: `Password Too Short!`})
         }
         const _user = await getUserByUsername(username)
         if (_user){
             next({name: "userExistsError",
-            message: "Username already registered"}
+            message: `User ${username} is already taken.`}
             )
         }
 
         const user = await createUser({username,password})
-        console.log(user,"XXXX")
 
         const token = jwt.sign(
             {
@@ -43,11 +43,39 @@ router.post('/register', async (req,res,next)=>{
     }
 
 })
-const {username,password} = 
 // POST /api/users/login
+router.post('/login', async (req,res,next)=>{
+    const { username, password } = req.body;
+  
+    if (!username || !password) {
+      next({
+        name: "MissingCredentialsError",
+        message: "Please supply both a username and password",
+      });
+    }
+    try {
+        const user = await getUserByUsername(username);
 
+    if (user && user.password == password) {
+      const { id, username } = user;
+      const token = jwt.sign({ id, username }, process.env.JWT_SECRET);
+
+      res.send({user, message: "you're logged in!", token: `${token}` });
+      
+    } 
+    } catch ({name,message}) {
+        next({name,message})
+    }
+})
 // GET /api/users/me
-
+router.get("/me",async (req,res,next)=>{
+    try {
+        console.log(req.body, "we are the champions")
+        res.send({})
+    } catch ({name,message}) {
+        next({name,message})
+    }
+})
 // GET /api/users/:username/routines
 
 module.exports = router;
