@@ -345,7 +345,7 @@ describe("DB Routines", () => {
   });
 
   describe("getPublicRoutinesByActivity", () => {
-    xit("should include the public routine containing a specific activityId", async () => {
+    it("should include the public routine containing a specific activityId", async () => {
       const routines = await getPublicRoutinesByActivity(fakeActivity);
       expectRoutinesToContainRoutineWithActivity(
         routines,
