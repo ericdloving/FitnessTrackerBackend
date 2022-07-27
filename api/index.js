@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
+
 // GET /api/health
 router.get('/health', async (req, res, next) => {
     res.status(200)
@@ -24,6 +25,7 @@ const routineActivitiesRouter = require('./routineActivities');
 router.use('/routine_activities', routineActivitiesRouter);
 
 router.use((error, req, res, next) => {
+    res.status(401);
     res.send({
       error: "",
       name: error.name,
