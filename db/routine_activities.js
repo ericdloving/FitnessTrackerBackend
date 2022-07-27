@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-catch */
 const client = require("./client");
 
 async function addActivityToRoutine({
@@ -6,31 +7,38 @@ async function addActivityToRoutine({
   count,
   duration,
 }) {
-  const { rows: [routine_activity] } = await client.query(
-    `INSERT INTO routine_activities("routineId", "activityId", count, duration)
+  try {
+    const {rows: [routine_activity]} = await client.query(
+      `INSERT INTO routine_activities("routineId", "activityId", count, duration)
      VALUES ($1, $2, $3, $4) 
      ON CONFLICT ("routineId","activityId") DO NOTHING
      RETURNING *;`,
-    [routineId, activityId, count, duration]
-  );
+      [routineId, activityId, count, duration]
+    );
 
-  return routine_activity;
+    return routine_activity;
+  } catch (error) {
+    throw error;
+  }
 }
 
 async function getRoutineActivityById(id) {}
 
 async function getRoutineActivitiesByRoutine({ id }) {
-  const { rows } = await client.query(
-    `
+  try {
+    const { rows } = await client.query(
+      `
     SELECT * 
     FROM routine_activities
     WHERE "routineId" = $1;
-    `,[id]);
-    console.log(rows, "THIS IS INSSIDE")
+    `,
+      [id]
+    );
     return rows;
+  } catch (error) {
+    throw error;
+  }
 }
-
-
 
 async function updateRoutineActivity({ id, ...fields }) {}
 

@@ -169,7 +169,6 @@ describe("DB Routines", () => {
     it("includes duration and count on activities, from routine_activities join", async () => {
       const routines = await getAllRoutines();
       const routine = routines.find((routine) => routine.id === fakeRoutine.id);
-      console.log(fakeRoutineActivity, "this is the info")
       const activity = routine.activities.find(
         (activity) => activity.id === fakeActivity.id
       );

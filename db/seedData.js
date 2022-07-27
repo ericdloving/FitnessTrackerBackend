@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-catch */
 // require in the database adapter functions as you write them (createUser, createActivity...)
 const { 
   createUser, 
@@ -12,6 +13,7 @@ const client = require("./client")
 
 
 async function dropTables() {
+  try {
   console.log("Dropping All Tables...")
   // drop all tables, in the correct order
   await client.query(`
@@ -21,12 +23,13 @@ async function dropTables() {
   DROP TABLE IF EXISTS activities;
   DROP TABLE IF EXISTS users;
   `);
-  
+  } catch(error) { throw error; }
 }
 
 async function createTables() {
   console.log("Starting to build tables...")
   // create all tables, in the correct order
+  try {
   await client.query(
     `CREATE TABLE users (
       id SERIAL PRIMARY KEY,
@@ -57,6 +60,7 @@ async function createTables() {
 
     `
   )
+    } catch(error) { throw error; }
 }
 
 /* 

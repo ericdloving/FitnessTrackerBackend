@@ -4,6 +4,7 @@ const client = require("./client");
 const { getRoutineActivitiesByRoutine } = require("./routine_activities");
 
 async function createRoutine({ creatorId, isPublic, name, goal }) {
+  try {
   const {
     rows: [routine],
   } = await client.query(
@@ -14,9 +15,11 @@ async function createRoutine({ creatorId, isPublic, name, goal }) {
     `,
     [creatorId, isPublic, name, goal]
   );
-  return routine;
+  return routine;}
+  catch (error) { throw error; }
 }
 async function getRoutineById(id) {
+  try {
   const {
     rows: [routine],
   } = await client.query(
@@ -28,9 +31,11 @@ async function getRoutineById(id) {
     [id]
   );
   return routine;
+  }catch (error) { throw error; }
 }
 
 async function getRoutinesWithoutActivities() {
+  try {
   const { rows } = await client.query(
     `
     SELECT * 
@@ -38,6 +43,7 @@ async function getRoutinesWithoutActivities() {
     `
   );
   return rows;
+  } catch (error) { throw error; }
 }
 
 async function getAllRoutines() {
