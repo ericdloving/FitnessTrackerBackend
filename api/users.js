@@ -7,7 +7,7 @@ const { JWT_SECRET } = process.env;
 
 // POST /api/users/register
 router.post('/register', async (req,res,next)=>{
-    console.log(req, "we live in the forest")
+    
     try{
 
         const {username,password} = req.body;
@@ -23,7 +23,7 @@ router.post('/register', async (req,res,next)=>{
         }
 
         const user = await createUser({username,password})
-        res.send({user})
+        console.log(user,"XXXX")
 
         const token = jwt.sign(
             {
@@ -36,10 +36,12 @@ router.post('/register', async (req,res,next)=>{
           res.send({
             message: "thank you for signing up",
             token,
+            user
           });
     }catch ({name,message}){
         next({name,message})
     }
+
 })
 const {username,password} = 
 // POST /api/users/login
