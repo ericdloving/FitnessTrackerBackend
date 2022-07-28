@@ -72,19 +72,19 @@ router.post("/:routineId/activities", async (req,res,next)=>{
   const {activityId,count,duration}= req.body
   const _activity = await getActivityById(activityId)
   const _routine = await getRoutineById(routineId)
-  const _routineActivities = await getRoutineActivitiesByRoutine({routineId})
-  console.log(_routineActivities, " this is the gas")
-  const ids = _routineActivities.map((element)=>{
-    element.id
-  })
+  // const _routineActivities = await getRoutineActivitiesByRoutine({routineId})
+  // console.log(_routineActivities, " this is the gas")
+  // const ids = _routineActivities.map((element)=>{
+  //   element.id
+  // })
 
   try {
-      if(ids.includes(activityId)){
-        next({name: "duplicateRoutineError",
-      message: `Activity ID ${activityId} already exists in Routine ID ${routineId}`})
-    }
+    //   if(ids.includes(activityId)){
+    //     next({name: "duplicateRoutineError",
+    //   message: `Activity ID ${activityId} already exists in Routine ID ${routineId}`})
+    // }
       
-      const addedActivity = await addActivityToRoutine(routineId,...req.body)
+      const addedActivity = await addActivityToRoutine({routineId, activityId,count,duration})
       console.log(addedActivity, "words words words")
       res.send(addedActivity)
       
