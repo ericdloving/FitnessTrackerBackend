@@ -21,6 +21,16 @@ async function addActivityToRoutine({
     throw error;
   }
 }
+async function activityIsInRoutine(activityId, routineId) {
+  try {
+    const { rows } = await client.query(
+      `SELECT * FROM routine_activities
+      WHERE "activityId" = $1 AND "routineId" = $2;`
+      ,[activityId, routineId])
+    console.log(rows,"row row row")
+    return rows.length > 0
+  }catch(error) { throw error }
+}
 
 async function getRoutineActivityById(id) {
   try {
@@ -113,4 +123,5 @@ module.exports = {
   updateRoutineActivity,
   destroyRoutineActivity,
   canEditRoutineActivity,
+  activityIsInRoutine
 };
