@@ -6,33 +6,7 @@ const router = express.Router();
 const jwt = require("jsonwebtoken");
 const { JWT_SECRET } = process.env;
 
-router.use(async (req, res, next) => {
-  const prefix = "Bearer ";
-  const auth = req.header("Authorization");
 
-  if (!auth) {
-    // nothing to see here
-    next();
-  } else if (auth.startsWith(prefix)) {
-    const token = auth.slice(prefix.length);
-
-    try {
-      const { id } = jwt.verify(token, JWT_SECRET);
-
-      if (id) {
-        req.user = await getUserById(id);
-        next();
-      }
-    } catch ({ name, message }) {
-      next({ name, message });
-    }
-  } else {
-    next({
-      name: "AuthorizationHeaderError",
-      message: `Authorization token must start with ${prefix}`,
-    });
-  }
-});
 
 // POST /api/users/register
 router.post("/register", async (req, res, next) => {
@@ -102,7 +76,6 @@ router.get("/me", requireUser, async (req, res, next) => {
 // GET /api/users/:username/routines
 router.get("/:username/routines", async(req, res, next)=> {
   const username = req.params.username
-  console.log(`The lizard king is ${username}`)
   try {
     if (req.user && req.user.username === username) {
       const routines = await getAllRoutinesByUser({username})
