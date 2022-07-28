@@ -36,9 +36,8 @@ router.patch("/:routineId",requireUser, async (req,res,next)=>{
             message: `routine ${routineId} not found`})
         }
         if (_routine.creatorId !== req.user.id){
-            res.status(403);
-            next({name: "UnauthorizedUserError",
-            message: `This routine is belong to us`})
+            next({name: "Forbidden",
+            message: `User ${req.user.username} is not allowed to update ${_routine.name}`})
         }
         const updatedRoutine = await updateRoutine({id:routineId, name, goal, isPublic})
         res.send(updatedRoutine)

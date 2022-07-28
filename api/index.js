@@ -56,7 +56,7 @@ const routineActivitiesRouter = require('./routineActivities');
 router.use('/routine_activities', routineActivitiesRouter);
 
 router.use((error, req, res, next) => {
-    res.status(401);
+    res.status(error.name.slice(0,4) === "Forb" ?403 : 401);
     res.send({
       error: "",
       name: error.name,
