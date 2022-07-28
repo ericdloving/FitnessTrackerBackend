@@ -1,10 +1,13 @@
 /* eslint-disable no-useless-catch */
 const client = require("./client");
+const bcrypt = require('bcrypt');
+const SALT_COUNT = 10;
 
 // database functions
 
 // user functions
 async function createUser({ username, password }) {
+  const hashedPassword = await bcrypt.hash(password, SALT_COUNT)
   try {
     const {
       rows: [user],
@@ -15,7 +18,7 @@ async function createUser({ username, password }) {
     ON CONFLICT (username) DO NOTHING 
     RETURNING id,username;
     `,
-      [username, password]
+      [username, hashedPassword]
     );
     return user;
   } catch (error) {
@@ -32,13 +35,15 @@ async function getUser({ username, password }) {
     SELECT *
     FROM users
     WHERE username=$1
-    AND password=$2;
   `,
-      [username, password]
+      [username]
     );
     if (user) {
-      const strippedUser = { id: user.id, username: user.username };
-      return strippedUser;
+      const hash = await bcrypt.compare(password, user.password);
+      if(hash)
+      {const strippedUser = { id: user.id, username: user.username };
+      return strippedUser;}
+      
     }
   } catch (error) {
     throw error;
