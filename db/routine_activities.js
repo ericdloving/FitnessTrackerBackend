@@ -27,7 +27,6 @@ async function activityIsInRoutine(activityId, routineId) {
       `SELECT * FROM routine_activities
       WHERE "activityId" = $1 AND "routineId" = $2;`
       ,[activityId, routineId])
-    console.log(rows,"row row row")
     return rows.length > 0
   }catch(error) { throw error }
 }
