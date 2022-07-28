@@ -57,40 +57,44 @@ async function getActivityById(id) {
 async function getActivityByName(name) {
   try {
     const {
-    rows: [activity],
-  } = await client.query(
-    `
+      rows: [activity],
+    } = await client.query(
+      `
     SELECT *
     FROM activities
     WHERE name=$1;
   `,
-    [name]
-  );
+      [name]
+    );
 
-  return activity;}
-  catch (error) {throw error;}
+    return activity;
+  } catch (error) {
+    throw error;
+  }
 }
 
 async function updateActivity({ id, ...fields }) {
   try {
     const setString = Object.keys(fields)
-    .map((key, index) => `"${key}"=$${index + 1}`)
-    .join(", ");
-  if (setString.length > 0) {
-    const {
-      rows: [activity],
-    } = await client.query(
-      `
+      .map((key, index) => `"${key}"=$${index + 1}`)
+      .join(", ");
+    if (setString.length > 0) {
+      const {
+        rows: [activity],
+      } = await client.query(
+        `
          UPDATE activities
          SET ${setString}
          WHERE id=${id}
          RETURNING *;
        `,
-      Object.values(fields)
-    );
-    return activity;
+        Object.values(fields)
+      );
+      return activity;
+    }
+  } catch (error) {
+    throw error;
   }
-} catch (error) { throw error;}
 }
 async function attachActivitiesToRoutines(routines) {
   // no side effects

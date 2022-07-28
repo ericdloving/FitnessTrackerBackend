@@ -1,12 +1,14 @@
 /* eslint-disable no-useless-catch */
 const express = require("express");
-const { getUserByUsername, createUser, getUserById, getPublicRoutinesByUser, getAllRoutinesByUser } = require("../db");
+const {
+  getUserByUsername,
+  createUser,
+  getPublicRoutinesByUser,
+  getAllRoutinesByUser,
+} = require("../db");
 const { requireUser } = require("./utils");
 const router = express.Router();
 const jwt = require("jsonwebtoken");
-const { JWT_SECRET } = process.env;
-
-
 
 // POST /api/users/register
 router.post("/register", async (req, res, next) => {
@@ -74,21 +76,19 @@ router.get("/me", requireUser, async (req, res, next) => {
   }
 });
 // GET /api/users/:username/routines
-router.get("/:username/routines", async(req, res, next)=> {
-  const username = req.params.username
+router.get("/:username/routines", async (req, res, next) => {
+  const username = req.params.username;
   try {
     if (req.user && req.user.username === username) {
-      const routines = await getAllRoutinesByUser({username})
-      res.send(routines)
+      const routines = await getAllRoutinesByUser({ username });
+      res.send(routines);
+    } else {
+      const routines = await getPublicRoutinesByUser({ username });
+      res.send(routines);
     }
-    else {
-      const routines = await getPublicRoutinesByUser({username})
-      res.send(routines)
-    }
-
-  } catch({name, message}) {
-    next({name, message})
+  } catch ({ name, message }) {
+    next({ name, message });
   }
-})
+});
 
 module.exports = router;
