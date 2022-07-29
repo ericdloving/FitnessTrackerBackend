@@ -2,6 +2,7 @@
 const express = require("express");
 const {
   getUserByUsername,
+  getUser,
   createUser,
   getPublicRoutinesByUser,
   getAllRoutinesByUser,
@@ -55,9 +56,9 @@ router.post("/login", async (req, res, next) => {
     });
   }
   try {
-    const user = await getUserByUsername(username);
+    const user = await getUser({ username, password });
 
-    if (user && user.password == password) {
+    if (user) {
       const { id, username } = user;
       const token = jwt.sign({ id, username }, process.env.JWT_SECRET);
 
