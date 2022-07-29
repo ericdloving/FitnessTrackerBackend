@@ -3,6 +3,8 @@ const client = require("./client");
 const bcrypt = require('bcrypt');
 const SALT_COUNT = 10;
 
+//this is just a test
+
 // database functions
 
 // user functions
