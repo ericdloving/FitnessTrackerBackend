@@ -1,6 +1,6 @@
 /* eslint-disable no-useless-catch */
 const client = require("./client");
-const bcrypt = require('bcrypt');
+const bcrypt = require("bcrypt");
 const SALT_COUNT = 10;
 
 //this is just a test
@@ -9,7 +9,7 @@ const SALT_COUNT = 10;
 
 // user functions
 async function createUser({ username, password }) {
-  const hashedPassword = await bcrypt.hash(password, SALT_COUNT)
+  const hashedPassword = await bcrypt.hash(password, SALT_COUNT);
   try {
     const {
       rows: [user],
@@ -42,10 +42,10 @@ async function getUser({ username, password }) {
     );
     if (user) {
       const hash = await bcrypt.compare(password, user.password);
-      if(hash)
-      {const strippedUser = { id: user.id, username: user.username };
-      return strippedUser;}
-      
+      if (hash) {
+        const strippedUser = { id: user.id, username: user.username };
+        return strippedUser;
+      } else return false; //login failed
     }
   } catch (error) {
     throw error;
