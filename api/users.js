@@ -64,6 +64,9 @@ router.post("/login", async (req, res, next) => {
 
       res.send({ user, message: "you're logged in!", token: `${token}` });
     }
+    else {
+      next({ name: "IncorrectCredentialsError","message": "Username or password is incorrect"})
+    }
   } catch ({ name, message }) {
     next({ name, message });
   }
