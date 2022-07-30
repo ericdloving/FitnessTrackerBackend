@@ -96,5 +96,3 @@ module.exports = {
   getUserByUsername,
 };
 
-
-curl https://fitnesstrac-kr.herokuapp.com/api/users/login -H "Content-Type: application/json" -X POST -d '{"username": "albert", "password": "bertie9"}'
